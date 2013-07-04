@@ -12,7 +12,6 @@ in your config ...
             consumer_key    => ... ,
             consumer_secret => ... ,
             callback_url    => 'http://...' ,
-            denied_url      => 'http://...' ,
         },
         ...
     };
@@ -64,6 +63,12 @@ and in your app ...
 # DESCRIPTION
 
 Nephia::Plugin::Auth::Twitter is a plugin for Nephia that provides twitter authentication feature.
+
+# CONFIG ATTRIBUTES
+
+- consumer\_key
+- consumer\_secret
+- callback\_url
 
 # COMMANDS
 
