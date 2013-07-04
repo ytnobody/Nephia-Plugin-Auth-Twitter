@@ -1,5 +1,5 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Twitter Auth for Nephia-apps.",
    "author" : [
       "ytnobody <ytnobody@gmail.com>"
    ],
@@ -42,6 +42,9 @@
       },
       "runtime" : {
          "requires" : {
+            "Data::UUID::MT" : "0",
+            "Nephia::DSLModifier" : "0",
+            "Net::Twitter::Lite::WithAPIv1_1" : "0",
             "perl" : "5.008005"
          }
       },
@@ -52,5 +55,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ytnobody/Nephia-Plugin-Auth-Twitter/issues"
+      },
+      "homepage" : "https://github.com/ytnobody/Nephia-Plugin-Auth-Twitter",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ytnobody/Nephia-Plugin-Auth-Twitter.git",
+         "web" : "https://github.com/ytnobody/Nephia-Plugin-Auth-Twitter"
+      }
+   },
    "version" : "0.01"
 }

@@ -1,9 +1,9 @@
 use strict;
 use Test::More;
 
-use_ok $_ for qw(
-    Nephia::Plugin::Auth::Twitter
-);
+use Nephia plugins => ['Auth::Twitter'];
+
+ok 1;
 
 done_testing;
 

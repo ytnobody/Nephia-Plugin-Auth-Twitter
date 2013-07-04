@@ -7,26 +7,67 @@ our $VERSION = "0.01";
 
 use Nephia::DSLModifier;
 use Net::Twitter::Lite::WithAPIv1_1;
-use Data::Dumper::Concise;
+use Data::UUID::MT;
+use Carp;
+
+our $UUID_VERSION = '4';
+our $COOKIE_NAME = 'session.twitter';
+
+my $uuid_generator = Data::UUID::MT->new(version => $UUID_VERSION);
 
 sub twitter_auth (&) {
     my $code        = shift;
     my $req         = origin('req');
-    my $session_key = origin('cookie')->('session.twitter');
     my $conf        = origin('config')->()->{'Auth::Twitter'};
     my $twitter     = Net::Twitter::Lite::WithAPIv1_1->new(%$conf);
     my $token       = $req->()->param('oauth_token');
     my $verifier    = $req->()->param('oauth_verifier');
-    if ( $token && $verifier ) {
-        return $twitter->request_access_token( verifier => $verifier );
+    my $denied      = $req->()->param('denied');
+    return _redirect_to_denied_url($twitter) if $denied;
+    return $token && $verifier ? 
+        _verify_token($twitter, $token, $verifier, $code) : 
+        _redirect_to_auth_url($twitter)
+    ;
+}
+
+sub _verify_token {
+    my ($twitter, $token, $verifier, $code) = @_;
+    my $twitter_id = eval { $twitter->request_access_token( 
+        token        => $token, 
+        token_secret => $twitter->{consumer_secret}, 
+        verifier     => $verifier 
+    ) };
+    if ($@) {
+        carp "verify failure: $@";
+        return;
     }
-    elsif (defined $session_key) {
-        return { session => $session_key };
-    }
-    else {
-        my $auth_url = $twitter->get_authorization_url(callback => $conf->{callback_url});
-        return origin('res')->(sub { redirect->($auth_url) });
-    }
+    my $uuid = $uuid_generator->create_hex;
+    $code->($uuid, $twitter_id);
+    origin('set_cookie')->($COOKIE_NAME => $uuid);
+    return origin('res')->(sub { redirect->($twitter->{callback_url}) });
+}
+
+sub _redirect_to_auth_url {
+    my $twitter = shift;
+    my $auth_url = $twitter->get_authorization_url(callback => $twitter->{callback_url});
+    return origin('res')->(sub { redirect->($auth_url) });
+}
+
+sub _redirect_to_denied_url {
+    my $twitter = shift;
+    my $denied_url = $twitter->{denied_url};
+    return $denied_url ? 
+        origin('res')->(sub { redirect->($denied_url) }) : 
+        origin('res')->(sub { 400, [], ['Access Denied'] }) 
+    ;
+}
+
+sub twitter_session () {
+    origin('cookie')->($COOKIE_NAME);
+}
+
+sub twitter_session_expire () {
+    origin('set_cookie')->($COOKIE_NAME => {value => undef, expires => time - 86400});
 }
 
 1;
@@ -36,7 +77,7 @@ __END__
 
 =head1 NAME
 
-Nephia::Plugin::Auth::Twitter - It's new $module
+Nephia::Plugin::Auth::Twitter - Twitter Auth for Nephia-apps.
 
 =head1 SYNOPSIS
 
@@ -48,6 +89,7 @@ in your config ...
             consumer_key    => ... ,
             consumer_secret => ... ,
             callback_url    => 'http://...' ,
+            denied_url      => 'http://...' ,
         },
         ...
     };
@@ -55,32 +97,61 @@ in your config ...
 and in your app ...
 
     package Your::App;
+    use strict;
+    use warnings;
+    use utf8;
+    
     use Nephia plugins => ['Auth::Twitter'];
+    
     our $SESSION = {};
     
-    sub verify_session {
-        my $session_key = twitter_session;
-        return $SESSION->{$session_key};
+    sub get_twitter_id {
+        my $session_id = shift;
+        $SESSION->{$session_id};
     }
     
-    path '/mypage' => sub {
-        unless ( verify_session() ) {
+    path '/' => sub {
+        my $session_id = twitter_session;
+        my $twitter_id = get_twitter_id($session_id);
+
+        ### redirect to auth url when failure to get twitter_id
+        unless ($twitter_id) {
             return twitter_auth {
-                my $session_key = shift;
-                $SESSION->{$session_key} = {};
-            };
+                # this code-block executes when authentication succeeded
+                my ($session_id, $twitter_id) = @_;
+                $SESSION->{$session_id} = $twitter_id;
+            } 
         }
-        return +{...};
+        
+        ### authorized area
+        return +{ yourname => $name };
+    };
+    
+    path '/logout' => sub {
+        twitter_session_expire;
+        +{ message => 'logout' };
     };
 
 =head1 DESCRIPTION
 
-Nephia::Plugin::Auth::Twitter is ...
+Nephia::Plugin::Auth::Twitter is a plugin for Nephia that provides twitter authentication feature.
 
-        # * patterns
-        # authentication success => redirect to callback_url
-        # has legal session key  => redirect to callback url
-        # other case             => redirect to twitter's auth page
+=head1 COMMANDS
+
+=head2 twitter_auth $CODEREF
+
+Redirect to twitter authentication page. 
+
+Then, execute code-block that supplied when authentication succeeded.
+
+=head2 twitter_session
+
+Fetch cookie that named 'session.twitter'.
+
+=head2 twitter_session_expire
+
+Expire cookie named 'session.twitter'.
+
 =head1 LICENSE
 
 Copyright (C) ytnobody.
