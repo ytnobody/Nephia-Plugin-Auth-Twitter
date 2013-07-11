@@ -1,6 +1,8 @@
 Revision history for Perl extension Nephia-Plugin-Auth-Twitter
 
 {{$NEXT}}
+
+0.02 2013-07-11T14:42:54Z
     - refactor : compliant for Nephia-0.31
 
 0.01 2013-07-04T13:11:38Z
