@@ -12,6 +12,7 @@ use Carp;
 
 our $UUID_VERSION = '4';
 our $COOKIE_NAME = 'session.twitter';
+our @EXPORT = qw/twitter_auth twitter_session twitter_session_expire /;
 
 my $uuid_generator = Data::UUID::MT->new(version => $UUID_VERSION);
 
