@@ -13,13 +13,26 @@ use Carp;
 our $UUID_VERSION = '4';
 our $COOKIE_NAME = 'session.twitter';
 our @EXPORT = qw/twitter_auth twitter_session twitter_session_expire /;
+our $APP_CLASS;
+our $OPT;
 
 my $uuid_generator = Data::UUID::MT->new(version => $UUID_VERSION);
+
+sub load {
+    my ($class, $app, $opts) = @_;
+    $APP_CLASS = $app;
+    $OPT = $opts;
+}
+
+sub origin {
+    my $method = shift;
+    $APP_CLASS->can($method);
+}
 
 sub twitter_auth (&) {
     my $code        = shift;
     my $req         = origin('req');
-    my $conf        = origin('config')->()->{'Auth::Twitter'};
+    my $conf        = $OPT || origin('config')->()->{'Auth::Twitter'};
     my $twitter     = Net::Twitter::Lite::WithAPIv1_1->new(%$conf);
     my $token       = $req->()->param('oauth_token');
     my $verifier    = $req->()->param('oauth_verifier');

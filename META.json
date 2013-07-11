@@ -44,6 +44,7 @@
          "requires" : {
             "Data::UUID::MT" : "0",
             "Nephia::DSLModifier" : "0",
+            "Net::OAuth" : "0.25",
             "Net::Twitter::Lite::WithAPIv1_1" : "0",
             "perl" : "5.008005"
          }
