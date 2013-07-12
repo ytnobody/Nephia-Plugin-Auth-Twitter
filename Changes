@@ -1,6 +1,7 @@
 Revision history for Perl extension Nephia-Plugin-Auth-Twitter
 
 {{$NEXT}}
+    - documentation : add note for direct-style config
 
 0.02 2013-07-11T14:42:54Z
     - refactor : compliant for Nephia-0.31

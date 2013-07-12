@@ -60,6 +60,17 @@ and in your app ...
         +{ message => 'logout' };
     };
 
+or more directly setting,
+
+    package YourApp;
+    use Nephia plugins => [
+        'Auth::Twitter' => {
+            consumer_key    => ... ,
+            consumer_secret => ... ,
+            callback_url    => 'http://...' ,
+        },
+    ];
+
 # DESCRIPTION
 
 Nephia::Plugin::Auth::Twitter is a plugin for Nephia that provides twitter authentication feature.
