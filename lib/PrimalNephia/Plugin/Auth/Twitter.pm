@@ -1,11 +1,11 @@
-package Nephia::Plugin::Auth::Twitter;
+package PrimalNephia::Plugin::Auth::Twitter;
 use 5.008005;
 use strict;
 use warnings;
 
 our $VERSION = "0.02";
 
-use Nephia::DSLModifier;
+use PrimalNephia::DSLModifier;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Data::UUID::MT;
 use Carp;
@@ -91,7 +91,7 @@ __END__
 
 =head1 NAME
 
-Nephia::Plugin::Auth::Twitter - Twitter Auth for Nephia-apps.
+PrimalNephia::Plugin::Auth::Twitter - Twitter Auth for PrimalNephia-apps.
 
 =head1 SYNOPSIS
 
@@ -114,7 +114,7 @@ and in your app ...
     use warnings;
     use utf8;
     
-    use Nephia plugins => ['Auth::Twitter'];
+    use PrimalNephia plugins => ['Auth::Twitter'];
     
     our $SESSION = {};
     
@@ -148,7 +148,7 @@ and in your app ...
 or more directly setting,
 
     package YourApp;
-    use Nephia plugins => [
+    use PrimalNephia plugins => [
         'Auth::Twitter' => {
             consumer_key    => ... ,
             consumer_secret => ... ,
@@ -158,7 +158,7 @@ or more directly setting,
 
 =head1 DESCRIPTION
 
-Nephia::Plugin::Auth::Twitter is a plugin for Nephia that provides twitter authentication feature.
+PrimalNephia::Plugin::Auth::Twitter is a plugin for PrimalNephia that provides twitter authentication feature.
 
 =head1 CONFIG ATTRIBUTES
 

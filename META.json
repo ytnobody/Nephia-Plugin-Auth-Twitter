@@ -1,10 +1,10 @@
 {
-   "abstract" : "Twitter Auth for Nephia-apps.",
+   "abstract" : "Twitter Auth for PrimalNephia-apps.",
    "author" : [
       "ytnobody <ytnobody@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.5.5, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Minilla/v0.6.3, CPAN::Meta::Converter version 2.130880",
    "license" : [
       "perl_5"
    ],
@@ -12,7 +12,7 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "Nephia-Plugin-Auth-Twitter",
+   "name" : "PrimalNephia-Plugin-Auth-Twitter",
    "no_index" : {
       "directory" : [
          "t",
@@ -43,9 +43,9 @@
       "runtime" : {
          "requires" : {
             "Data::UUID::MT" : "0",
-            "Nephia::DSLModifier" : "0",
             "Net::OAuth" : "0.25",
             "Net::Twitter::Lite::WithAPIv1_1" : "0",
+            "PrimalNephia::DSLModifier" : "0",
             "perl" : "5.008005"
          }
       },
@@ -58,13 +58,13 @@
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/ytnobody/Nephia-Plugin-Auth-Twitter/issues"
+         "web" : "https://github.com/ytnobody/PrimalNephia-Plugin-Auth-Twitter/issues"
       },
-      "homepage" : "https://github.com/ytnobody/Nephia-Plugin-Auth-Twitter",
+      "homepage" : "https://github.com/ytnobody/PrimalNephia-Plugin-Auth-Twitter",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/ytnobody/Nephia-Plugin-Auth-Twitter.git",
-         "web" : "https://github.com/ytnobody/Nephia-Plugin-Auth-Twitter"
+         "url" : "git://github.com/ytnobody/PrimalNephia-Plugin-Auth-Twitter.git",
+         "web" : "https://github.com/ytnobody/PrimalNephia-Plugin-Auth-Twitter"
       }
    },
    "version" : "0.02"

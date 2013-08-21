@@ -1,7 +1,7 @@
 use strict;
 use Test::More;
 
-use Nephia plugins => ['Auth::Twitter'];
+use PrimalNephia plugins => ['Auth::Twitter'];
 
 ok 1;
 

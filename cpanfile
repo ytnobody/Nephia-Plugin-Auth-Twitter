@@ -1,7 +1,7 @@
 requires 'perl', '5.008001';
 requires 'Net::Twitter::Lite::WithAPIv1_1';
 requires 'Data::UUID::MT';
-requires 'Nephia::DSLModifier';
+requires 'PrimalNephia::DSLModifier';
 requires 'Net::OAuth', '0.25';
 
 
